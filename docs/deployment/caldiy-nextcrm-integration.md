@@ -60,3 +60,8 @@ Create a Cal.diy webhook with:
 - Disable or delete the webhook in Cal.diy.
 - Redeploy the previous NextCRM image/commit if needed.
 - Existing Cal.diy-created activities are normal CRM activity rows and can be soft-deleted from NextCRM if they were test data.
+
+
+## Optional embedded UI comparison
+
+NextCRM also includes a `booking-calendar` UI add-on at `/scheduling` for internal UX comparison. Configure `CALDIY_API_URL`, `CALDIY_API_KEY`, and `CALDIY_EVENT_TYPE_ID` after Cal.diy is deployed. The add-on does not replace the webhook sync; Cal.diy webhooks remain the CRM activity reconciliation path.
