@@ -3,7 +3,7 @@
 # ============================================
 FROM node:22-alpine AS deps
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@10.32.1 --activate
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ RUN pnpm install --frozen-lockfile
 # ============================================
 FROM node:22-alpine AS build
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@10.32.1 --activate
 
 WORKDIR /app
 
@@ -44,6 +44,12 @@ ENV EMAIL_ENCRYPTION_KEY="000000000000000000000000000000000000000000000000000000
 ENV OPENAI_API_KEY="sk-placeholder-for-build"
 ENV RESEND_API_KEY="re_placeholder_for_build"
 ENV SKIP_ENV_VALIDATION=1
+
+# Staging-only migration repair: upstream 0_init creates legacy invoice tables,
+# then 20260415164939_invoices_module creates the replacement invoice module.
+# On a fresh DB this collides unless legacy tables are removed first.
+# Do not use this as a production-data migration.
+RUN node -e "const fs=require('fs'); const p='prisma/migrations/20260415164939_invoices_module/migration.sql'; const pre='DROP TABLE IF EXISTS \"DocumentsToInvoices\" CASCADE;\nDROP TABLE IF EXISTS \"Invoices\" CASCADE;\nDROP TABLE IF EXISTS \"invoice_States\" CASCADE;\n'; fs.writeFileSync(p, pre + fs.readFileSync(p,'utf8'));"
 
 RUN pnpm prisma generate
 RUN pnpm next build
