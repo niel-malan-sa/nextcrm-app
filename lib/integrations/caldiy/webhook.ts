@@ -12,6 +12,10 @@ const bookingAttendeeSchema = z
   })
   .passthrough();
 
+const calDateTimeSchema = z.string().refine((value) => !Number.isNaN(Date.parse(value)), {
+  message: "Invalid ISO datetime",
+});
+
 const bookingPayloadSchema = z
   .object({
     uid: z.string().optional().nullable(),
@@ -19,8 +23,8 @@ const bookingPayloadSchema = z
     bookingId: z.union([z.string(), z.number()]).optional().nullable(),
     title: z.string().optional().nullable(),
     eventTitle: z.string().optional().nullable(),
-    startTime: z.string().datetime().optional().nullable(),
-    endTime: z.string().datetime().optional().nullable(),
+    startTime: calDateTimeSchema.optional().nullable(),
+    endTime: calDateTimeSchema.optional().nullable(),
     length: z.number().optional().nullable(),
     status: z.string().optional().nullable(),
     cancellationReason: z.string().optional().nullable(),
