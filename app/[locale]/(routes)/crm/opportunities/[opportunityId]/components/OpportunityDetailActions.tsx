@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,6 +37,7 @@ export function OpportunityDetailActions({
   currencies,
 }: OpportunityDetailActionsProps) {
   const [updateOpen, setUpdateOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <>
@@ -72,6 +74,9 @@ export function OpportunityDetailActions({
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem onClick={() => setUpdateOpen(true)}>
             Update
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push(`/crm/proposals/new?opportunityId=${opportunity?.id}`)}>
+            Create proposal
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

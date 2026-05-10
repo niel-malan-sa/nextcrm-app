@@ -1,0 +1,16 @@
+packages:
+  - .
+
+onlyBuiltDependencies:
+  - "@parcel/watcher"
+  - "@prisma/engines"
+  - "@swc/core"
+  - aws-crt
+  - bcrypt
+  - canvas
+  - esbuild
+  - msw
+  - prisma
+  - protobufjs
+  - sharp
+  - unrs-resolver
