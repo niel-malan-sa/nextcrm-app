@@ -9,7 +9,7 @@ WORKDIR /app
 
 COPY package.json pnpm-lock.yaml ./
 
-RUN pnpm install --frozen-lockfile
+RUN npm install --legacy-peer-deps --no-audit --no-fund
 
 # ============================================
 # Stage 2: Build the application
@@ -50,9 +50,8 @@ ENV SKIP_ENV_VALIDATION=1
 # On a fresh DB this collides unless legacy tables are removed first.
 # Do not use this as a production-data migration.
 RUN node -e "const fs=require('fs'); const p='prisma/migrations/20260415164939_invoices_module/migration.sql'; const pre='DROP TABLE IF EXISTS \"DocumentsToInvoices\" CASCADE;\nDROP TABLE IF EXISTS \"Invoices\" CASCADE;\nDROP TABLE IF EXISTS \"invoice_States\" CASCADE;\n'; fs.writeFileSync(p, pre + fs.readFileSync(p,'utf8'));"
-
-RUN pnpm prisma generate
-RUN pnpm next build
+RUN npx prisma generate
+RUN npx next build
 
 # ============================================
 # Stage 3: Production runner

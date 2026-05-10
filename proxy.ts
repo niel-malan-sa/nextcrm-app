@@ -40,6 +40,9 @@ export async function proxy(req: NextRequest) {
 
   // Non-API routes — redirect to sign-in if no session cookie
   if (!path.startsWith("/api")) {
+    if (path.includes("/proposal/")) {
+      return intlMiddleware(req);
+    }
     if (!sessionCookie) {
       // Allow auth pages (sign-in, register, pending, inactive)
       const authPaths = ["/sign-in", "/register", "/pending", "/inactive"];

@@ -197,7 +197,8 @@
       "msw",
       "prisma",
       "sharp",
-      "unrs-resolver"
+      "unrs-resolver",
+      "protobufjs"
     ]
   }
 }

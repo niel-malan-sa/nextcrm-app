@@ -18,6 +18,7 @@ type Props = {
     contacts: string;
     leads: string;
     opportunities: string;
+    proposals: string;
     contracts: string;
     products: string;
   };
@@ -55,6 +56,10 @@ export const getCrmMenuItem = ({ localizations }: Props): NavItem => {
       {
         title: localizations.opportunities,
         url: "/crm/opportunities",
+      },
+      {
+        title: localizations.proposals,
+        url: "/crm/proposals",
       },
       {
         title: localizations.contracts,
