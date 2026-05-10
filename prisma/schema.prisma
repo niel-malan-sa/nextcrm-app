@@ -1700,6 +1700,7 @@ model crm_Products {
   created_by_user Users?                 @relation("ProductCreatedBy", fields: [createdBy], references: [id])
   accountProducts crm_AccountProducts[]
   opportunityLineItems crm_OpportunityLineItems[]
+  proposalLineItems    crm_Proposal_Line_Items[]
   contractLineItems    crm_ContractLineItems[]
   invoiceLineItems     Invoice_LineItems[]
 
