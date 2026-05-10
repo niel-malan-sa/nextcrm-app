@@ -58,6 +58,7 @@ model crm_Accounts {
   emails             EmailsToAccounts[]
   accountProducts    crm_AccountProducts[]
   invoices           Invoices[]
+  proposals          crm_Proposals[]
 
   @@index([assigned_to])
   @@index([industry])
@@ -231,6 +232,7 @@ model crm_Opportunities {
   contacts             ContactsToOpportunities[]
   embedding            crm_Embeddings_Opportunities?
   lineItems            crm_OpportunityLineItems[]
+  proposals            crm_Proposals[]
   deletedAt            DateTime?
   deletedBy            String?   @db.Uuid
 
@@ -964,6 +966,8 @@ model Users {
   target_enrichments_triggered   crm_Target_Enrichment[]   @relation("target_enrichment_triggered_by")
   created_campaigns              crm_campaigns[]           @relation("created_campaigns")
   created_campaign_templates     crm_campaign_templates[]  @relation("created_campaign_templates")
+  created_proposals              crm_Proposals[]           @relation("ProposalCreatedBy")
+  updated_proposals              crm_Proposals[]           @relation("ProposalUpdatedBy")
   auditLogs                      crm_AuditLog[]
   created_products               crm_Products[]    @relation("ProductCreatedBy")
   activities_created             crm_Activities[]  @relation("activity_created_by")
@@ -1544,6 +1548,104 @@ model Verification {
   updatedAt  DateTime? @updatedAt
 
   @@map("verification")
+}
+
+// ============================================
+// PROPOSALS MODULE
+// ============================================
+
+model crm_Proposals {
+  id            String              @id @default(uuid()) @db.Uuid
+  title         String
+  summary       String?             @db.Text
+  templateKey   String              @default("consulting")
+  status        crm_Proposal_Status @default(DRAFT)
+  publicToken   String              @unique @default(cuid())
+  currency      String              @db.VarChar(3)
+  sections      Json                @db.JsonB
+  brandJson     Json?               @db.JsonB
+  metadataJson  Json?               @db.JsonB
+  subtotal      Decimal             @default(0) @db.Decimal(18, 2)
+  discountTotal Decimal             @default(0) @db.Decimal(18, 2)
+  taxTotal      Decimal             @default(0) @db.Decimal(18, 2)
+  total         Decimal             @default(0) @db.Decimal(18, 2)
+  opportunityId String?             @db.Uuid
+  accountId     String?             @db.Uuid
+  sentAt        DateTime?
+  viewedAt      DateTime?
+  acceptedAt    DateTime?
+  signedAt      DateTime?
+  publishedAt   DateTime?
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  createdBy     String?             @db.Uuid
+  updatedBy     String?             @db.Uuid
+  deletedAt     DateTime?
+  deletedBy     String?             @db.Uuid
+
+  opportunity     crm_Opportunities?        @relation(fields: [opportunityId], references: [id], onDelete: SetNull)
+  account         crm_Accounts?             @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  lineItems       crm_Proposal_Line_Items[]
+  versions        crm_Proposal_Versions[]
+  created_by_user Users?                    @relation("ProposalCreatedBy", fields: [createdBy], references: [id])
+  updated_by_user Users?                    @relation("ProposalUpdatedBy", fields: [updatedBy], references: [id])
+
+  @@index([opportunityId])
+  @@index([accountId])
+  @@index([status])
+  @@index([publicToken])
+  @@index([createdAt])
+  @@index([deletedAt])
+}
+
+model crm_Proposal_Line_Items {
+  id            String   @id @default(uuid()) @db.Uuid
+  proposalId    String   @db.Uuid
+  productId     String?  @db.Uuid
+  name          String
+  description   String?  @db.Text
+  quantity      Int      @default(1)
+  unitPrice     Decimal  @db.Decimal(18, 2)
+  discountValue Decimal  @default(0) @db.Decimal(18, 2)
+  lineTotal     Decimal  @db.Decimal(18, 2)
+  currency      String   @db.VarChar(3)
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  createdBy     String?  @db.Uuid
+  updatedBy     String?  @db.Uuid
+
+  proposal crm_Proposals @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  product  crm_Products? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([proposalId])
+  @@index([productId])
+}
+
+model crm_Proposal_Versions {
+  id         String   @id @default(uuid()) @db.Uuid
+  proposalId String   @db.Uuid
+  version    Int
+  snapshot   Json     @db.JsonB
+  html       String?  @db.Text
+  createdAt  DateTime @default(now())
+  createdBy  String?  @db.Uuid
+
+  proposal crm_Proposals @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+
+  @@unique([proposalId, version])
+  @@index([proposalId])
+  @@index([createdAt])
+}
+
+enum crm_Proposal_Status {
+  DRAFT
+  READY
+  SENT
+  VIEWED
+  ACCEPTED
+  SIGNED
+  ARCHIVED
 }
 
 // ============================================
