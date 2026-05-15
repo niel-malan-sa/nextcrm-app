@@ -2,40 +2,20 @@
 @config "../../tailwind.config.js";
 
 @keyframes dialog-overlay-show {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
-
 @keyframes dialog-overlay-hide {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
-
 @keyframes dialog-content-show {
-  from {
-    transform: translateX(100%);
-  }
-
-  to {
-    transform: translateX(0%);
-  }
+  from { transform: translateX(100%); }
+  to { transform: translateX(0%); }
 }
-
 @keyframes dialog-content-hide {
-  from {
-    transform: translateX(0%);
-  }
-  to {
-    transform: translateX(100%);
-  }
+  from { transform: translateX(0%); }
+  to { transform: translateX(100%); }
 }
 
 .dropBox {
@@ -43,75 +23,77 @@
 }
 
 @layer base {
+  /* ── AffluentOS light palette ─────────────────────── */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+    --background: 40 17% 98%;
+    --foreground: 240 13% 4%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+    --card-foreground: 240 13% 4%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 262.1 83.3% 57.8%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 262.1 83.3% 57.8%;
+    --popover-foreground: 240 13% 4%;
+    --primary: 77 91% 45%;
+    --primary-foreground: 240 13% 4%;
+    --secondary: 0 0% 95%;
+    --secondary-foreground: 240 13% 4%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 240 4% 46%;
+    --accent: 77 91% 45%;
+    --accent-foreground: 240 13% 4%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
+    --ring: 77 91% 45%;
     --radius: 0.5rem;
-    --chart-1: 262 83% 58%;
-    --chart-2: 280 70% 65%;
-    --chart-3: 240 65% 55%;
-    --chart-4: 262 50% 75%;
-    --chart-5: 300 60% 60%;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 0 0% 45.1%;
-    --sidebar-primary: 0 0% 9%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 0 0% 96.1%;
-    --sidebar-accent-foreground: 0 0% 9%;
-    --sidebar-border: 0 0% 89.8%;
-    --sidebar-ring: 262.1 83.3% 57.8%;
+    --chart-1: 77 91% 45%;
+    --chart-2: 210 100% 56%;
+    --chart-3: 142 71% 45%;
+    --chart-4: 30 100% 55%;
+    --chart-5: 280 80% 60%;
+    --sidebar-background: 40 17% 98%;
+    --sidebar-foreground: 240 13% 4%;
+    --sidebar-primary: 77 91% 45%;
+    --sidebar-primary-foreground: 240 13% 4%;
+    --sidebar-accent: 0 0% 95%;
+    --sidebar-accent-foreground: 240 13% 4%;
+    --sidebar-border: 0 0% 88%;
+    --sidebar-ring: 77 91% 45%;
   }
 
+  /* ── AffluentOS dark palette (default) ───────────── */
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 263.4 70% 50.4%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 263.4 70% 50.4%;
-    --chart-1: 263 70% 60%;
-    --chart-2: 280 65% 68%;
-    --chart-3: 240 60% 55%;
-    --chart-4: 263 50% 75%;
-    --chart-5: 300 55% 62%;
-    --sidebar-background: 0 0% 3.9%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 0 0% 98%;
-    --sidebar-primary-foreground: 0 0% 9%;
-    --sidebar-accent: 0 0% 14.9%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 0 0% 14.9%;
-    --sidebar-ring: 263.4 70% 50.4%;
+    --background: 240 13% 4%;
+    --foreground: 0 0% 100%;
+    --card: 240 11% 7%;
+    --card-foreground: 0 0% 100%;
+    --popover: 240 11% 10%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 77 91% 64%;
+    --primary-foreground: 240 13% 4%;
+    --secondary: 240 11% 10%;
+    --secondary-foreground: 0 0% 89%;
+    --muted: 240 11% 10%;
+    --muted-foreground: 240 6% 59%;
+    --accent: 77 91% 64%;
+    --accent-foreground: 240 13% 4%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 13%;
+    --input: 0 0% 16%;
+    --ring: 77 91% 64%;
+    --chart-1: 77 91% 64%;
+    --chart-2: 210 100% 66%;
+    --chart-3: 142 71% 55%;
+    --chart-4: 30 100% 60%;
+    --chart-5: 280 80% 70%;
+    --sidebar-background: 240 13% 4%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 77 91% 64%;
+    --sidebar-primary-foreground: 240 13% 4%;
+    --sidebar-accent: 240 11% 10%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 13%;
+    --sidebar-ring: 77 91% 64%;
   }
 }
 
