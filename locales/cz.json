@@ -1,7 +1,7 @@
 {
   "RootLayout": {
-    "title": "NextCRM",
-    "description": "NextCRM je open source CRM vytvořené na frameworku NextJS."
+    "title": "AffluentOS",
+    "description": "AffluentOS — the operating system for high-performance coaching businesses."
   },
   "ModuleMenu": {
     "dashboard": "Přehled",
