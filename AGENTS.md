@@ -117,3 +117,75 @@ gh pr create --base main --head dev --title "<type>: <summary>" --body "..."
 - When the user says "create a PR" without further context, assume `dev → main`.
 
 ---
+
+---
+
+## 5. Branch State: `caldiy-scheduling-pilot` (as of May 2026)
+
+### What is built and complete
+
+Both custom features are ~95% done and committed.
+
+**Cal.diy scheduling integration**
+- Webhook receiver at `/api/integrations/cal/webhook` — HMAC-validated, maps all booking lifecycle events to `crm_Activities`
+- Contact matching by email, deduplication by booking UID
+- Booking calendar comparison UI at `/scheduling` with full Cal.com v2 API proxy routes
+- Sidebar nav entry: already wired (`Scheduling` with CalendarClock icon)
+- Deployment runbook: `docs/deployment/caldiy-nextcrm-integration.md`
+
+**Proposals module (BetterProposals-style)**
+- 3 database tables: `crm_Proposals`, `crm_Proposal_Line_Items`, `crm_Proposal_Versions`
+- Migration SQL at `prisma/migrations/20260510000000_add_proposals_module/migration.sql`
+- Full builder UI at `/crm/proposals` — sections editor, line items, brand settings, status workflow, version locking
+- Public client-facing page at `/proposal/[token]` — client can view and one-click accept; view/accept timestamps tracked
+- Demo mode: `/proposal/demo` works without a database record
+- "Create proposal" button in opportunity detail actions
+- Proposals nav: already in CRM sidebar menu under "Sales"
+
+**Styling**
+- AffluentOS dark theme applied: chartreuse primary (`77 91% 64%`), dark navy background (`240 13% 4%`)
+- Dark mode set as default in `app/[locale]/layout.tsx`
+
+### Why sessions stopped
+
+The last code commit fixed a Prisma schema back-reference
+(`proposalLineItems crm_Proposal_Line_Items[]` added to `crm_Products`).
+The schema is now correct but `prisma generate` was never run after the fix.
+The generated Prisma client is stale — it has no knowledge of the proposal models,
+causing TypeScript errors across all proposal files and a broken build.
+
+### Revival checklist — run these on the NextCRM server
+
+```bash
+# 1. Regenerate Prisma client (picks up all 3 proposal models + product back-ref)
+pnpm prisma generate
+
+# 2. Apply the proposal migration to the database
+pnpm prisma migrate deploy
+
+# 3. Verify clean compile
+pnpm build
+```
+
+### Required environment variables
+
+```env
+# Cal.diy webhook (required for scheduling sync)
+CALDIY_WEBHOOK_SECRET=<same-secret-as-in-caldiy-webhook-settings>
+
+# Cal.diy API (for the /scheduling comparison UI — optional if webhook-only)
+CALDIY_BASE_URL=https://your-caldiy-deployment.example.com
+CALDIY_API_URL=https://your-caldiy-deployment.example.com/api/v2
+CALDIY_API_KEY=cal_live_...
+CALDIY_EVENT_TYPE_ID=123
+CALDIY_EVENT_LENGTH_MINUTES=30
+```
+
+### Files changed in the AffluentOS theming pass
+
+| File | What changed |
+|------|-------------|
+| `app/[locale]/globals.css` | Full AffluentOS CSS variable palette (dark + light) |
+| `app/[locale]/layout.tsx` | `defaultTheme="dark"` on ThemeProvider |
+
+---
