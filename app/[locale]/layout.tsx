@@ -62,7 +62,7 @@ export default async function RootLayout(props: Props) {
     <html lang={locale} suppressHydrationWarning>
       <body className={inter.className + " min-h-screen"}>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider attribute="class" defaultTheme="dark">
             {children}
           </ThemeProvider>
         </NextIntlClientProvider>
